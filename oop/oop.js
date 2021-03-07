@@ -132,43 +132,45 @@ RemovableStorage.prototype = Object.create(Storage.prototype);
 //중괄호로 클래스르 구분하여 따로 constructor라고 명시하고 매개변수도 정의할 수 있다.
 //constructor는 class에 하나만 정의할 수 있다.
 //constructor는 매개변수에서 전달받은 값을 속성으로 추가하거나, 속성의 초기갓을 대입하는 초기화 과정 주로 한다.
-class Cart {
-  constructor() {
-    this.store = {};
-  }
+// class Cart {
+//   constructor() {
+//     this.store = {};
+//   }
 
-  addProduct(product) {
-    //product객체 내부 id를 store의 key로 하여 id: product{}로 저장
-    this.store[product.id] = product;
-  }
+//   addProduct(product) {
+//     //product객체 내부 id를 store의 key로 하여 id: product{}로 저장
+//     this.store[product.id] = product;
+//   }
 
-  getProuduct(id) {
-    //store 객체의 키로 하여 값으로 가지는 해당 product 객체를 반환
-    return this.store[id];
-  }
-} //cart class 정의 끝
+//   getProuduct(id) {
+//     //store 객체의 키로 하여 값으로 가지는 해당 product 객체를 반환
+//     return this.store[id];
+//   }
+// } //cart class 정의 끝
 
-//const로 정의하였기때문에 cart1에는 어떠한 값도 대입할 수 없다.
-const cart1 = new Cart();
-const popularCart = new Cart();
+// //const로 정의하였기때문에 cart1에는 어떠한 값도 대입할 수 없다.
+// const cart1 = new Cart();
+// const popularCart = new Cart();
 
-cart1.addProduct({ id: 1, name: "노트북" });
-popularCart.addProduct({ id: 2, name: "씽씽 전동킥보드" });
-console.log(cart1.store);
-console.log(popularCart.store);
+// cart1.addProduct({ id: 1, name: "노트북" });
+// popularCart.addProduct({ id: 2, name: "씽씽 전동킥보드" });
+// console.log(cart1.store);
+// console.log(popularCart.store);
 
-const p = cart1.getProuduct(1);
-console.log(p);
+// const p = cart1.getProuduct(1);
+// console.log(p);
 
 /* 초보52 클래스 상속 */
 class Chart {
+  width = 200;
+  height = 200;
   constructor(width, height) {
     this.width = width;
     this.height = height;
   }
 
   drawLine() {
-    console.log("draw line");
+    console.log("=======================draw line");
   }
 }
 
@@ -183,16 +185,22 @@ class BarChart extends Chart {
   }
 }
 
+//width=100, height=100을 생성자함수의 매개변수 값으로 하는 Barchart 인스턴스 barchar1 생성
 const barchart1 = new BarChart(100, 100);
+//barchart1은 Chart클래스를 상속해서 draw메서드를 호추한다.
+//그래서 this를 통해 drawLine()메서드를 호출
 barchart1.draw();
 
 /* 초보53 정적 메소드와 속성 정의 */
+//일반적인 메소드는 new연산자를 통해 생성된 인스턴스를 통해 호출하지만 정적 메소드는 해당 클래스를 통해 직접 호출하는 메소드
 class Product {
   static build(name, price) {
+    //Math.random()은 0부터 1까지 난수가 반환되는 함수, 1000을 곱하면 0~1000범위의 결과값으로 반환됨
     const id = Math.floor(Math.random() * 1000);
     return new Product(id, name, price);
   }
 
+  //세금계산하는 정적 메소드
   static getTaxPrice(product) {
     return product.price * 0.1 + product.price;
   }
@@ -204,43 +212,24 @@ class Product {
   }
 }
 
+//폐기가 가능한 상품 클래스르 정의
+//상속시 정적메소드 또한 상속
 class DeposableProduct extends Product {
   depose() {
     this.deposed = true;
   }
 }
-
+//new 연산자를 사용하지않고 Product클래스의 build메소드를 바로 호출
 const gum = Product.build("껌", 1000);
+console.log(gum instanceof Product);
 console.log(gum);
 
 const clothes = new DeposableProduct(1, "옷", 2000);
+console.log(clothes instanceof Product);
+console.log(clothes);
+
+//Product 클래스를 상속하였기때문에 getTaxPrice 호출 가능
 const taxPrice = DeposableProduct.getTaxPrice(clothes);
+const randomId = DeposableProduct.build("스마트폰", 110000);
+console.log(randomId);
 console.log(taxPrice);
-
-/* 초보54 this 이해 */
-class ProductWithCode {
-  static get CODE_PREFIX() {
-    return "PRODUCT-";
-  }
-
-  constructor(id) {
-    this.id;
-    this.code = ProductWithCode.CODE_PREFIX + id;
-  }
-}
-
-const product1 = new ProductWithCode("001");
-console.log(ProductWithCode.CODE_PREFIX);
-console.log(product1.code);
-
-/* 초보55 모듈 이해하기 */
-var namespaceA = (function () {
-  var privateVariable = "비공개 변수";
-  return {
-    publicApi: function () {
-      console.log(privateVariable + "를 접근할 수 있습니다.");
-    },
-  };
-})();
-
-namespaceA.publicApi();

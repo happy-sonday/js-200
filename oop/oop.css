@@ -1,0 +1,25 @@
+body{
+    margin:0;
+    background: burlywood;
+}
+
+
+.header{
+    display: flex;
+    height: 40px;
+    background: darkmagenta;
+    padding: 16px;
+}
+.body{
+    display: flex;
+    /* height: calc(100vh - 29px); */
+    background: darkolivegreen;
+    padding: 16px;
+    height: calc(100vh - 176px);
+}
+.footer{
+    display: flex;
+    height: 40px;
+    background: darkorange;
+    padding: 16px;
+}
