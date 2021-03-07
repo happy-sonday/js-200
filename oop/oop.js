@@ -161,75 +161,185 @@ RemovableStorage.prototype = Object.create(Storage.prototype);
 // console.log(p);
 
 /* 초보52 클래스 상속 */
-class Chart {
-  width = 200;
-  height = 200;
-  constructor(width, height) {
-    this.width = width;
-    this.height = height;
-  }
+// class Chart {
+//   width = 200;
+//   height = 200;
+//   constructor(width, height) {
+//     this.width = width;
+//     this.height = height;
+//   }
 
-  drawLine() {
-    console.log("=======================draw line");
-  }
-}
+//   drawLine() {
+//     console.log("=======================draw line");
+//   }
+// }
 
-class BarChart extends Chart {
-  constructor(width, height) {
-    super(width, height);
-  }
+// class BarChart extends Chart {
+//   constructor(width, height) {
+//     super(width, height);
+//   }
 
-  draw() {
-    this.drawLine();
-    console.log(`draw ${this.width} X ${this.height} barChart`);
-  }
-}
+//   draw() {
+//     this.drawLine();
+//     console.log(`draw ${this.width} X ${this.height} barChart`);
+//   }
+// }
 
-//width=100, height=100을 생성자함수의 매개변수 값으로 하는 Barchart 인스턴스 barchar1 생성
-const barchart1 = new BarChart(100, 100);
-//barchart1은 Chart클래스를 상속해서 draw메서드를 호추한다.
-//그래서 this를 통해 drawLine()메서드를 호출
-barchart1.draw();
+// //width=100, height=100을 생성자함수의 매개변수 값으로 하는 Barchart 인스턴스 barchar1 생성
+// const barchart1 = new BarChart(100, 100);
+// //barchart1은 Chart클래스를 상속해서 draw메서드를 호추한다.
+// //그래서 this를 통해 drawLine()메서드를 호출
+// barchart1.draw();
 
 /* 초보53 정적 메소드와 속성 정의 */
 //일반적인 메소드는 new연산자를 통해 생성된 인스턴스를 통해 호출하지만 정적 메소드는 해당 클래스를 통해 직접 호출하는 메소드
-class Product {
-  static build(name, price) {
-    //Math.random()은 0부터 1까지 난수가 반환되는 함수, 1000을 곱하면 0~1000범위의 결과값으로 반환됨
-    const id = Math.floor(Math.random() * 1000);
-    return new Product(id, name, price);
-  }
+// class Product {
+//   static build(name, price) {
+//     //Math.random()은 0부터 1까지 난수가 반환되는 함수, 1000을 곱하면 0~1000범위의 결과값으로 반환됨
+//     const id = Math.floor(Math.random() * 1000);
+//     return new Product(id, name, price);
+//   }
 
-  //세금계산하는 정적 메소드
-  static getTaxPrice(product) {
-    return product.price * 0.1 + product.price;
-  }
+//   //세금계산하는 정적 메소드
+//   static getTaxPrice(product) {
+//     return product.price * 0.1 + product.price;
+//   }
 
-  constructor(id, name, price) {
-    this.id = id;
-    this.name = name;
-    this.price = price;
-  }
+//   constructor(id, name, price) {
+//     this.id = id;
+//     this.name = name;
+//     this.price = price;
+//   }
+// }
+
+// //폐기가 가능한 상품 클래스르 정의
+// //상속시 정적메소드 또한 상속
+// class DeposableProduct extends Product {
+//   depose() {
+//     this.deposed = true;
+//   }
+// }
+// //new 연산자를 사용하지않고 Product클래스의 build메소드를 바로 호출
+// const gum = Product.build("껌", 1000);
+// console.log(gum instanceof Product);
+// console.log(gum);
+
+// const clothes = new DeposableProduct(1, "옷", 2000);
+// console.log(clothes instanceof Product);
+// console.log(clothes);
+
+// //Product 클래스를 상속하였기때문에 getTaxPrice 호출 가능
+// const taxPrice = DeposableProduct.getTaxPrice(clothes);
+// const randomId = DeposableProduct.build("스마트폰", 110000);
+// console.log(randomId);
+// console.log(taxPrice);
+
+// class ProductWithCode {
+//   static get CODE_PREFIX() {
+//     return "PRODUCT-";
+//   }
+
+//   constructor(id) {
+//     this.code = ProductWithCode.CODE_PREFIX + id;
+//   }
+// }
+
+// const product1 = new ProductWithCode("001");
+// console.log(ProductWithCode.CODE_PREFIX);
+// console.log(product1.code);
+
+/* 초보54 this 이해 */
+/* 함수의 호출 방법에따라 동적으로 결정
+    this의 목적은 작성된 코드를 재사용
+    호출되는 방식에따라 동적으로 결정되어 잘못된 코드를 작성할 수 있다.*/
+/* 전역/객체안의 메소드로 정의/ 생성자 함수/ 특정로직을 게산하여 값을 반환하는 목적 */
+
+/* 전역에 사용한경우 Window 객체를 가리킨다 따라서 window.valueA로 해석 */
+this.valueA = "a";
+console.log(valueA);
+valueB = "b";
+console.log(this.valueB);
+
+function checkThis() {
+  console.log(this);
+}
+function checkThis2() {
+  "use strict"; //엄격모드 실행 지정
+  console.log(this);
+}
+checkThis(); //Window객체가 반환
+checkThis2(); //undefined
+
+function Product(name, price) {
+  this.name = name;
+  this.price = price;
 }
 
-//폐기가 가능한 상품 클래스르 정의
-//상속시 정적메소드 또한 상속
-class DeposableProduct extends Product {
-  depose() {
-    this.deposed = true;
-  }
-}
-//new 연산자를 사용하지않고 Product클래스의 build메소드를 바로 호출
-const gum = Product.build("껌", 1000);
-console.log(gum instanceof Product);
-console.log(gum);
+//new없이 호출되면 전역개체인 Windows를 가리키게된다.
+const product1 = Product("가방", 2000);
+console.log(window.name);
+console.log(window.price);
+//console.log(product1.name);//Cannot read porperty error발생
 
-const clothes = new DeposableProduct(1, "옷", 2000);
-console.log(clothes instanceof Product);
-console.log(clothes);
+const newProduct1 = new Product("가방", 2000);
+console.log(`new 키워드로 생성된 객체 ${newProduct1.name}`);
+console.log(`new 키워드로 생성된 객체 ${newProduct1.price}`);
 
-//Product 클래스를 상속하였기때문에 getTaxPrice 호출 가능
-const taxPrice = DeposableProduct.getTaxPrice(clothes);
-const randomId = DeposableProduct.build("스마트폰", 110000);
-console.log(randomId);
-console.log(taxPrice);
+const product2 = {
+  name: "가방2",
+  price: 3000,
+  getVAT() {
+    //객체 내 정의된 함수에서 this를 사용할 경우 this는 해당 객체를 가리킨다.
+    //product2.price
+    return this.price / 10;
+  },
+};
+const valueOfProduct2 = product2.getVAT(); //300=3000/10
+console.log(valueOfProduct2);
+
+const calVAT = product2.getVAT; //변수를 통해 호출하게되면 일반적인 함수 호출이 되어 this는 전역을 가리킨다.
+const VAT2 = calVAT(); //윗 코드에 this.price를 통해 2000원이 저장된 window.price를 가리키게 되고 getVat()메소드 연산에 의해 200값이 출력
+console.log(VAT2);
+
+//bind메소드 뿐만아니라 call apply메소드를 통해 this가 가리키는 값을 변경할 수 있다.
+const newCalVAT = calVAT.bind(product2);
+const VAT3 = newCalVAT();
+console.log(VAT3);
+
+const counter1 = {
+  count: 0,
+  addAfter1Sec() {
+    setTimeout(function () {
+      console.log(this); //this는 전역Windows를 가리키고 있기때문에 정의되지 않은 count와 연산하려고해서 NaN이 발생
+      console.log(this.count);
+      this.count += 1;
+      console.log(this.count);
+    }, 2000);
+  },
+};
+counter1.addAfter1Sec(); //NaN
+
+//화살표함수에서 this는 호출 시점에서 동적으로 정의되는것이아니라 작성시점에서 결정
+//중첩된 함수로 작성되었을때 화살표 함수를 사용하면 부모 함수의 this와 같다.
+const counter2 = {
+  count: 0,
+  addAfter1Sec() {
+    setTimeout(() => {
+      console.log(this);
+      this.count += 1;
+      console.log(this.count);
+    }, 2000);
+  },
+};
+counter2.addAfter1Sec();
+// /* 초보55 모듈 이해하기 */
+// var namespaceA = (function () {
+//   var privateVariable = "비공개 변수";
+//   return {
+//     publicApi: function () {
+//       console.log(privateVariable + "를 접근할 수 있습니다.");
+//     },
+//   };
+// })();
+
+// namespaceA.publicApi();
